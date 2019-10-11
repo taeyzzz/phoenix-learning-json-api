@@ -165,7 +165,8 @@ defmodule TaeyAPI.Auth do
   """
   def update_role(%Role{} = role, attrs) do
     role
-    |> Role.changeset(attrs)
+    # |> Role.changeset(attrs)
+    |> Role.update_description_changeset(attrs)
     |> Repo.update()
   end
 

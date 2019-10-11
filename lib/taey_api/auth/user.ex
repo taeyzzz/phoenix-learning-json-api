@@ -7,7 +7,7 @@ defmodule TaeyAPI.Auth.User do
     field :password, :string
     field :first_name, :string
     field :last_name, :string
-    belongs_to :role, Role
+    belongs_to :role, Role, foreign_key: :role_id
 
     timestamps()
   end
@@ -15,8 +15,15 @@ defmodule TaeyAPI.Auth.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :first_name, :last_name, :role])
-    |> validate_required([:email, :password, :first_name, :last_name, :role])
+    |> cast(attrs, [:email, :password, :first_name, :last_name, :role_id])
+    |> validate_required([:email, :password, :first_name, :last_name, :role_id])
     |> unique_constraint(:email)
+  end
+
+  @doc false
+  def update_user_detail_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:first_name, :last_name, :role_id])
+    |> validate_required([:email, :password, :first_name, :last_name, :role_id])
   end
 end

@@ -7,5 +7,6 @@ defmodule TaeyAPIWeb.Router do
 
   scope "/api", TaeyAPIWeb do
     pipe_through :api
+    resources "/users", UserController
   end
 end

@@ -16,6 +16,9 @@ docker run -p 80:80 \
 
 ```
 
+# Postman Document
+- Just import postman environment and use it!
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`

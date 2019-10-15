@@ -1,6 +1,7 @@
 defmodule TaeyAPI.Auth.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias TaeyAPI.Auth.Role
 
   schema "users" do
     field :email, :string

@@ -7,6 +7,7 @@ defmodule TaeyAPI.Auth do
   alias TaeyAPI.Repo
 
   alias TaeyAPI.Auth.User
+  alias TaeyAPI.Auth.Role
 
   @doc """
   Returns the list of users.
@@ -18,7 +19,7 @@ defmodule TaeyAPI.Auth do
 
   """
   def list_users do
-    Repo.all(User)
+    Repo.all(User) |> Repo.preload(:role)
   end
 
   @doc """
@@ -35,7 +36,9 @@ defmodule TaeyAPI.Auth do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    Repo.get!(User, id) |> Repo.preload([:role])
+  end
 
   @doc """
   Creates a user.

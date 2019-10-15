@@ -1,6 +1,7 @@
 defmodule TaeyAPIWeb.UserView do
   use TaeyAPIWeb, :view
   alias TaeyAPIWeb.UserView
+  alias TaeyAPIWeb.RoleView
 
   def render("index.json", %{users: users}) do
     %{data: render_many(users, UserView, "user.json")}
@@ -16,7 +17,7 @@ defmodule TaeyAPIWeb.UserView do
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name,
-      role_id: user.role_id
+      role: render_one(user.role, RoleView, "role.json")
     }
   end
 end

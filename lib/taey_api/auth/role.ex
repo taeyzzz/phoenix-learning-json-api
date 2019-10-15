@@ -1,10 +1,12 @@
 defmodule TaeyAPI.Auth.Role do
   use Ecto.Schema
   import Ecto.Changeset
+  alias TaeyAPI.Auth.User
 
   schema "roles" do
     field :description, :string
     field :name, :string
+    has_many :users, User
 
     timestamps()
   end

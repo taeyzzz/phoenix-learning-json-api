@@ -134,7 +134,9 @@ defmodule TaeyAPI.Auth do
       ** (Ecto.NoResultsError)
 
   """
-  def get_role!(id), do: Repo.get!(Role, id)
+  def get_role!(id) do
+    Repo.get!(Role, id) |> Repo.preload([:users])
+  end
 
   @doc """
   Creates a role.

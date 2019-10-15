@@ -8,7 +8,7 @@ defmodule TaeyAPIWeb.Router do
   scope "/api", TaeyAPIWeb do
     pipe_through :api
     resources "/users", UserController
-    resources "/roles", RoleController, only: [:index, :update]
+    resources "/roles", RoleController, only: [:index, :show, :update]
     resources "/projects", ProjectController
   end
 end

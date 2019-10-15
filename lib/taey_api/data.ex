@@ -101,4 +101,100 @@ defmodule TaeyAPI.Data do
   def change_project(%Project{} = project) do
     Project.changeset(project, %{})
   end
+
+  alias TaeyAPI.Data.UsersProjects
+
+  @doc """
+  Returns the list of users_projects.
+
+  ## Examples
+
+      iex> list_users_projects()
+      [%UsersProjects{}, ...]
+
+  """
+  def list_users_projects do
+    Repo.all(UsersProjects)
+  end
+
+  @doc """
+  Gets a single users_projects.
+
+  Raises `Ecto.NoResultsError` if the Users projects does not exist.
+
+  ## Examples
+
+      iex> get_users_projects!(123)
+      %UsersProjects{}
+
+      iex> get_users_projects!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_users_projects!(id), do: Repo.get!(UsersProjects, id)
+
+  @doc """
+  Creates a users_projects.
+
+  ## Examples
+
+      iex> create_users_projects(%{field: value})
+      {:ok, %UsersProjects{}}
+
+      iex> create_users_projects(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_users_projects(attrs \\ %{}) do
+    %UsersProjects{}
+    |> UsersProjects.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a users_projects.
+
+  ## Examples
+
+      iex> update_users_projects(users_projects, %{field: new_value})
+      {:ok, %UsersProjects{}}
+
+      iex> update_users_projects(users_projects, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_users_projects(%UsersProjects{} = users_projects, attrs) do
+    users_projects
+    |> UsersProjects.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a UsersProjects.
+
+  ## Examples
+
+      iex> delete_users_projects(users_projects)
+      {:ok, %UsersProjects{}}
+
+      iex> delete_users_projects(users_projects)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_users_projects(%UsersProjects{} = users_projects) do
+    Repo.delete(users_projects)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking users_projects changes.
+
+  ## Examples
+
+      iex> change_users_projects(users_projects)
+      %Ecto.Changeset{source: %UsersProjects{}}
+
+  """
+  def change_users_projects(%UsersProjects{} = users_projects) do
+    UsersProjects.changeset(users_projects, %{})
+  end
 end

@@ -63,4 +63,61 @@ defmodule TaeyAPI.DataTest do
       assert %Ecto.Changeset{} = Data.change_project(project)
     end
   end
+
+  describe "users_projects" do
+    alias TaeyAPI.Data.UsersProjects
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def users_projects_fixture(attrs \\ %{}) do
+      {:ok, users_projects} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Data.create_users_projects()
+
+      users_projects
+    end
+
+    test "list_users_projects/0 returns all users_projects" do
+      users_projects = users_projects_fixture()
+      assert Data.list_users_projects() == [users_projects]
+    end
+
+    test "get_users_projects!/1 returns the users_projects with given id" do
+      users_projects = users_projects_fixture()
+      assert Data.get_users_projects!(users_projects.id) == users_projects
+    end
+
+    test "create_users_projects/1 with valid data creates a users_projects" do
+      assert {:ok, %UsersProjects{} = users_projects} = Data.create_users_projects(@valid_attrs)
+    end
+
+    test "create_users_projects/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Data.create_users_projects(@invalid_attrs)
+    end
+
+    test "update_users_projects/2 with valid data updates the users_projects" do
+      users_projects = users_projects_fixture()
+      assert {:ok, %UsersProjects{} = users_projects} = Data.update_users_projects(users_projects, @update_attrs)
+    end
+
+    test "update_users_projects/2 with invalid data returns error changeset" do
+      users_projects = users_projects_fixture()
+      assert {:error, %Ecto.Changeset{}} = Data.update_users_projects(users_projects, @invalid_attrs)
+      assert users_projects == Data.get_users_projects!(users_projects.id)
+    end
+
+    test "delete_users_projects/1 deletes the users_projects" do
+      users_projects = users_projects_fixture()
+      assert {:ok, %UsersProjects{}} = Data.delete_users_projects(users_projects)
+      assert_raise Ecto.NoResultsError, fn -> Data.get_users_projects!(users_projects.id) end
+    end
+
+    test "change_users_projects/1 returns a users_projects changeset" do
+      users_projects = users_projects_fixture()
+      assert %Ecto.Changeset{} = Data.change_users_projects(users_projects)
+    end
+  end
 end

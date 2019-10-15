@@ -41,4 +41,18 @@ defmodule TaeyAPIWeb.UserController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def handle_login(conn, %{"email" => email, "password" => password}) do
+    with %User{} = user <- Auth.authen_user(email, password) do
+      conn
+      |> put_session(:user_id, user.id)
+      |> render("show.json", user: user)
+    end
+  end
+
+  def handle_logout(conn, _params) do
+    conn
+    |> delete_session(:user_id)
+    |> send_resp(:no_content, "")
+  end
 end

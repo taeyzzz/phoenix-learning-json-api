@@ -40,6 +40,22 @@ defmodule TaeyAPI.Auth do
     Repo.get!(User, id) |> Repo.preload([:role])
   end
 
+  def authen_user(email, password) do
+    query = from(u in User, select: u, where: u.email == ^email)
+    query
+    |> Repo.one!
+    |> Repo.preload([:role])
+    |> compare_password(password)
+  end
+
+  def compare_password(user, input_password) do
+    if user.password == input_password do
+      user
+    else
+      {:error, :not_found}
+    end
+  end
+
   @doc """
   Creates a user.
 

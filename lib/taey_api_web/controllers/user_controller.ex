@@ -3,6 +3,7 @@ defmodule TaeyAPIWeb.UserController do
 
   alias TaeyAPI.Auth
   alias TaeyAPI.Auth.User
+  alias TaeyAPI.Repo
 
   action_fallback TaeyAPIWeb.FallbackController
 
@@ -16,7 +17,7 @@ defmodule TaeyAPIWeb.UserController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.user_path(conn, :show, user))
-      |> render("show.json", user: user)
+      |> render("show.json", user: user |> Repo.preload([:role]))
     end
   end
 

@@ -3,6 +3,7 @@ defmodule TaeyAPIWeb.UsersProjectsController do
 
   alias TaeyAPI.Data
   alias TaeyAPI.Data.UsersProjects
+  alias TaeyAPI.Auth
 
   action_fallback TaeyAPIWeb.FallbackController
 
@@ -42,9 +43,15 @@ defmodule TaeyAPIWeb.UsersProjectsController do
   end
 
   def handle_list_user_in_project(conn, %{"id" => id}) do
-    id |> IO.inspect
     project = Data.get_project!(id)
     users = Data.get_users_in_project(project.id) |> Enum.map(fn(x) -> x.user end)
     render(conn, "list_user_in_project.json", users: users)
+  end
+
+  def handle_list_project_by_user(conn, %{"id" => id}) do
+    id |> IO.inspect
+    user = Auth.get_user!(id)
+    projects = Data.get_project_by_user(user.id) |> Enum.map(fn(x) -> x.project end)
+    render(conn, "list_project_by_user.json", projects: projects)
   end
 end

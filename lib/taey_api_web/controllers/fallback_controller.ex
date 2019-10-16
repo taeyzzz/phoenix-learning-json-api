@@ -19,4 +19,11 @@ defmodule TaeyAPIWeb.FallbackController do
     |> put_view(TaeyAPIWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(TaeyAPIWeb.ErrorView)
+    |> render(:"401")
+  end
 end

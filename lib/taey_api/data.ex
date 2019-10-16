@@ -138,7 +138,13 @@ defmodule TaeyAPI.Data do
     query
     |> Repo.all
     |> Repo.preload([user: [:role]])
-    |> IO.inspect
+  end
+
+  def get_project_by_user(id) do
+    query = from(up in UsersProjects, select: up, where: up.user_id == ^id)
+    query
+    |> Repo.all
+    |> Repo.preload([:project])
   end
 
   @doc """

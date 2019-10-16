@@ -40,4 +40,11 @@ defmodule TaeyAPIWeb.UsersProjectsController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def handle_list_user_in_project(conn, %{"id" => id}) do
+    id |> IO.inspect
+    project = Data.get_project!(id)
+    users = Data.get_users_in_project(project.id) |> Enum.map(fn(x) -> x.user end)
+    render(conn, "list_user_in_project.json", users: users)
+  end
 end

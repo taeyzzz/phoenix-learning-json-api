@@ -148,19 +148,33 @@ defmodule TaeyAPI.Data do
   end
 
   def add_user_to_project(id, users) do
+    {project_id, _} = id |> Integer.parse
+    time_now = DateTime.utc_now() |> DateTime.to_naive() |> NaiveDateTime.truncate(:second)
     prepared_payload_changeset = users |> Enum.map(fn(x) ->
-      %UsersProjects{}
-      |> UsersProjects.changeset(%{user_id: x, project_id: id})
+      # %UsersProjects{}
+      # |> UsersProjects.changeset(%{user_id: x, project_id: id})
       # %{user_id: x, project_id: 6}
+
+      %{user_id: x, project_id: project_id, inserted_at: time_now, updated_at: time_now}
     end)
-    prepared_payload_changeset
-    |> Enum.with_index()
-    |> Enum.reduce(Ecto.Multi.new(), fn ({changeset, index}, multi) ->
-      Ecto.Multi.insert_or_update(multi, Integer.to_string(index), changeset)
-    end)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert_all(:insert_all, UsersProjects, prepared_payload_changeset)
     |> Repo.transaction()
     |> IO.inspect
+
+
+
+    # prepared_payload_changeset
+    # |> Enum.with_index()
+    # |> Enum.reduce(Ecto.Multi.new(), fn ({changeset, index}, multi) ->
+    #   Ecto.Multi.insert_or_update(multi, Integer.to_string(index), changeset)
+    # end)
+    # |> Repo.transaction()
+    # |> IO.inspect
     get_users_in_project(id)
+
+
     # prepared_payload
     # |> Enum.each(fn(x) ->
     #   %UsersProjects{}

@@ -54,4 +54,12 @@ defmodule TaeyAPIWeb.UsersProjectsController do
     projects = Data.get_project_by_user(user.id) |> Enum.map(fn(x) -> x.project end)
     render(conn, "list_project_by_user.json", projects: projects)
   end
+
+  def handle_add_user_to_project(conn, %{"id" => project_id, "users" => users}) do
+    project_id |> IO.inspect
+    users |> IO.inspect
+    with list_users <- Data.add_user_to_project(project_id, users) do
+      render(conn, "list_user_in_project.json", users: list_users |> Enum.map(fn(x) -> x.user end))
+    end
+  end
 end

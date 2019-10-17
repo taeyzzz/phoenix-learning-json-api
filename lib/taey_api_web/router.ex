@@ -23,6 +23,7 @@ defmodule TaeyAPIWeb.Router do
     resources "/projects", ProjectController
     get "/list-user/projects/:id", UsersProjectsController, :handle_list_user_in_project
     get "/list-project/users/:id", UsersProjectsController, :handle_list_project_by_user
+    post "/user/project/:id", UsersProjectsController, :handle_add_user_to_project
   end
 
   defp ensure_authenticated(conn, _opts) do

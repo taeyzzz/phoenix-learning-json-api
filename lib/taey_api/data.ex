@@ -147,6 +147,28 @@ defmodule TaeyAPI.Data do
     |> Repo.preload([:project])
   end
 
+  def add_user_to_project(id, users) do
+    prepared_payload_changeset = users |> Enum.map(fn(x) ->
+      %UsersProjects{}
+      |> UsersProjects.changeset(%{user_id: x, project_id: id})
+      # %{user_id: x, project_id: 6}
+    end)
+    prepared_payload_changeset
+    |> Enum.with_index()
+    |> Enum.reduce(Ecto.Multi.new(), fn ({changeset, index}, multi) ->
+      Ecto.Multi.insert_or_update(multi, Integer.to_string(index), changeset)
+    end)
+    |> Repo.transaction()
+    |> IO.inspect
+    get_users_in_project(id)
+    # prepared_payload
+    # |> Enum.each(fn(x) ->
+    #   %UsersProjects{}
+    #   |> UsersProjects.changeset(x)
+    #   |> Repo.insert()
+    # end)
+  end
+
   @doc """
   Creates a users_projects.
 

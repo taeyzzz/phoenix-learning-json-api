@@ -35,7 +35,7 @@ defmodule TaeyAPI.Data do
       ** (Ecto.NoResultsError)
 
   """
-  def get_project!(id), do: Repo.get!(Project, id)
+  def get_project!(id), do: Repo.get!(Project, id) |> Repo.preload([:users])
 
   @doc """
   Creates a project.
@@ -103,6 +103,7 @@ defmodule TaeyAPI.Data do
   end
 
   alias TaeyAPI.Data.UsersProjects
+  alias TaeyAPI.Auth.User
 
   @doc """
   Returns the list of users_projects.
@@ -147,32 +148,13 @@ defmodule TaeyAPI.Data do
     |> Repo.preload([:project])
   end
 
-  def add_user_to_project(id, users) do
-    {project_id, _} = id |> Integer.parse
-    time_now = DateTime.utc_now() |> DateTime.to_naive() |> NaiveDateTime.truncate(:second)
-    prepared_payload_changeset = users |> Enum.map(fn(x) ->
-      # %UsersProjects{}
-      # |> UsersProjects.changeset(%{user_id: x, project_id: id})
-      # %{user_id: x, project_id: 6}
+  def upsert_users_to_project(project, users) do
+    list_users = from(u in User, select: u, where: u.id in ^users) |> Repo.all
 
-      %{user_id: x, project_id: project_id, inserted_at: time_now, updated_at: time_now}
-    end)
-
-    Ecto.Multi.new()
-    |> Ecto.Multi.insert_all(:insert_all, UsersProjects, prepared_payload_changeset)
-    |> Repo.transaction()
-    |> IO.inspect
-
-
-
-    # prepared_payload_changeset
-    # |> Enum.with_index()
-    # |> Enum.reduce(Ecto.Multi.new(), fn ({changeset, index}, multi) ->
-    #   Ecto.Multi.insert_or_update(multi, Integer.to_string(index), changeset)
-    # end)
-    # |> Repo.transaction()
-    # |> IO.inspect
-    get_users_in_project(id)
+    with {:ok, updated_project} <- project |> Project.changeset_add_user_to_project(list_users) |> Repo.update do
+      updated_project |> Repo.preload([users: [:role]])
+    end
+    # get_users_in_project(id)
 
 
     # prepared_payload

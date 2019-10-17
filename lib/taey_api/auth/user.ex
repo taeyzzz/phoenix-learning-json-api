@@ -3,6 +3,7 @@ defmodule TaeyAPI.Auth.User do
   import Ecto.Changeset
   alias TaeyAPI.Auth.Role
   alias TaeyAPI.Data.Project
+  alias TaeyAPI.Data.UsersProjects
 
   schema "users" do
     field :email, :string
@@ -10,7 +11,7 @@ defmodule TaeyAPI.Auth.User do
     field :first_name, :string
     field :last_name, :string
     belongs_to :role, Role, foreign_key: :role_id
-    many_to_many :projects, Project, join_through: "users_projects", on_replace: :delete
+    many_to_many :projects, Project, join_through: UsersProjects, on_replace: :delete
 
     timestamps()
   end

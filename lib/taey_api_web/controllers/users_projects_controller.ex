@@ -56,8 +56,6 @@ defmodule TaeyAPIWeb.UsersProjectsController do
   end
 
   def handle_add_user_to_project(conn, %{"id" => project_id, "users" => users}) do
-    project_id |> IO.inspect
-    users |> IO.inspect
     project = Data.get_project!(project_id)
     with updated_project <- Data.upsert_users_to_project(project, users) do
       render(conn, "list_user_in_project.json", users: updated_project.users)
